@@ -32,42 +32,39 @@ def generateNeighbours(kindergarten, gem, coordinates_set)
 end
 
 def getLiveNeighbours(kindergarten, gem)
-
-    isAlive = lambda { |neighbour, kindergarten| kindergarten[neighbour[0]][neighbour[1]] == 1}
     
+    isAlive = lambda { |neighbour, kindergarten| neighbour if kindergarten[neighbour[0]][neighbour[1]] == 1 }
+
     generateNeighbours(kindergarten, gem, getPossibleCoordinates(gem)).select {
     
-        |neighbour| neighbour if isAlive.call(neighbour, kindergarten)
+        |neighbour| isAlive.call(neighbour, kindergarten)
         
     }.compact
 
 end
 
-def mustDie(kindergarten, gem)
-    return 0
-end
-
-def canLive(kindergarten, gem)
-    return 1
-end
 
 def evolveKindergarten(kindergarten)
+
+    mustDie = lambda {|live_neighbours| live_neighbours.length > 3 or live_neighbours.length < 2}
+    canLive = lambda {|live_neighbours| live_neighbours.length == 3}
 
         (0..kindergarten.length-1).map{
             |x| (0..kindergarten.length-1).map{
                 |y|
                                 
                 if kindergarten[x][y] == 1
-                    if getLiveNeighbours(kindergarten, [x, y]).length > 3 or getLiveNeighbours(kindergarten, [x, y]).length < 2
-                        mustDie(kindergarten, kindergarten[x][y])
+                    if mustDie.call(getLiveNeighbours(kindergarten, [x, y]))
+                        0
                     else
-                        canLive(kindergarten, kindergarten[x][y])
+                        1
                     end
+                    
                 else kindergarten[x][y] == 0
-                    if getLiveNeighbours(kindergarten, [x, y]).length == 3
-                        canLive(kindergarten, kindergarten[x][y])
+                    if canLive.call(getLiveNeighbours(kindergarten, [x, y]))
+                        1
                     else
-                        kindergarten[x][y]
+                        0
                     end
                 end
             }
