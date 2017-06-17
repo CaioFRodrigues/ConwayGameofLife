@@ -3,20 +3,21 @@ require 'tk'
 
 =begin
 
-Yeah, this is a block comment in Ruby. I know, I agree...
-
-Anyway, here's the layout structure:
+Layout structure:
 
 Main Window
-    Main Frame
+    Top Row Frame
         Drawable Frame
+        Vertical Separator Frame
         Right Column Frame
             Controls Frame
                 Buttons
                 Range (Slider)
             About Frame
-                Label
+                Labels
+    Horizontal Separator Frame
     Status Frame
+        Labels
 
 =end
 
@@ -24,46 +25,55 @@ Main Window
 # Main Window
 main_window = TkRoot.new {
     title "Conway's Gem of Life" # TODO: change title later
-    width 640
-    height 480
+    minsize 640, 480
+    #resizable false, false # TODO: uncomment me
     padx 2
     pady 2
-    resizable false, false
-    pack_propagate(false)
     background 'black'
 }
 
-# Main Frame
-main_frame = TkFrame.new {
-    height 454
-    background 'black'
-    pack('side' => 'top', 'fill' => 'x')
+### Frames ###
+
+# Top Row Frame
+top_row_frame = TkFrame.new {
+    pack :fill => 'both', :expand => true
 }
 
 # Drawable Frame
-drawable_frame = TkFrame.new(main_frame) {
-    width 458
-    height 454
+drawable_frame = TkFrame.new(top_row_frame) {
     background 'yellow' # TODO: remove me
-    pack('side' => 'left')
+    pack :side => 'left', :fill => 'both', :expand => true
+}
+
+# Vertical Separator Frame
+v_separator_frame =  TkFrame.new(top_row_frame) {
+    width 2
+    background 'black'
+    pack :side => 'left', :fill => 'y'
 }
 
 # Right Column Frame
-r_column_frame = TkFrame.new(main_frame) {
-    width 176
-    height 454
+r_column_frame = TkFrame.new(top_row_frame) {
+    width 180
     background 'purple' # TODO: remove me
-    pack('side' => 'right')
+    pack :side => 'left', :fill => 'y'
+}
+
+# Horizontal Separator Frame
+h_separator_frame =  TkFrame.new() {
+    height 2
+    background 'black'
+    pack :fill => 'x'
 }
 
 # Status Frame
 status_frame = TkFrame.new {
     height 20
     background 'white' # TODO: remove me
-    pack('side' => 'bottom', 'fill' => 'x')
+    pack :fill => 'x'
 }
 
-# Canvas
+### Elements ###
 
 
 # Run
