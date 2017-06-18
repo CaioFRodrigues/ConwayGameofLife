@@ -8,21 +8,19 @@ Layout structure:
 Main Window
     Top Row Frame
         Drawable Frame
+            Canvas
         Vertical Separator
         Right Column Frame
             Controls Labelframe
                 Buttons Row Frame
-                    Play Button
+                    Start Button
                     Pause Button
                     Stop Button
                     Next Button
                     Random Button
                 Delay Scale
             About Labelframe
-                Group Name Label
-                Student Names Label
-                Class Name Label
-                Teacher Name Label
+                About Label
                 Inf Logo Label
     Horizontal Separator
     Status Frame
@@ -42,10 +40,9 @@ living_cells_str = TkVariable.new
 # Main Window
 main_window = TkRoot.new {
     title "Conway's Gem of Life" # TODO: change title later
-    minsize 640, 480
-    resizable false, false
     relief 'groove'
     borderwidth 1
+    resizable false, false
 }
 
 
@@ -53,12 +50,12 @@ main_window = TkRoot.new {
 
 # Top Row Frame
 top_row_frame = TkFrame.new {
-    pack :fill => 'both', :expand => true
+    pack :fill => 'both'
 }
 
 # Drawable Frame
 drawable_frame = TkFrame.new(top_row_frame) {
-    pack :side => 'left', :fill => 'both', :expand => true
+    pack :side => 'left', :fill => 'both', :padx => 12
 }
 
 # Vertical Separator
@@ -69,30 +66,24 @@ v_separator_frame =  TkSeparator.new(top_row_frame) {
 
 # Right Column Frame
 r_column_frame = TkFrame.new(top_row_frame) {
-    width 200
-    pack_propagate false
-    pack :side => 'right', :fill => 'y'
+    pack :side => 'right', :fill => 'y', :padx => 12, :pady => 5
 }
 
 # Controls Labelframe
 controls_labelframe = TkLabelframe.new(r_column_frame) {
     text ' Controls: '
-    height 140
-    pack_propagate false
-    pack :fill => 'x', :padx => 12, :pady => 6
+    pack :pady => 5
 }
 
 # Buttons Row Frame
 buttons_row_frame = TkFrame.new(controls_labelframe) {
-    height 60
-    pack_propagate false
-    pack :fill => 'x'
+    pack :padx => 5
 }
 
 # About Labelframe
 about_labelframe = TkLabelframe.new(r_column_frame) {
     text ' About: '
-    pack :fill => 'both', :padx => 12, :pady => 6
+    pack :fill => 'both', :pady => 5
 }
 
 # Horizontal Separator 
@@ -102,8 +93,6 @@ h_separator_frame = TkSeparator.new() {
 
 # Status Frame
 status_frame = TkFrame.new {
-    height 20
-    pack_propagate false
     pack :fill => 'x'
 }
 
@@ -117,99 +106,83 @@ canvas = TkCanvas.new(drawable_frame) {
     relief 'solid'
     borderwidth 1
     background 'white'
-    pack_propagate false
     pack :expand => true
 }
 
-# Play Button
+# Start Button
 play_button = TkButton.new(buttons_row_frame) {
-    text 'Play'
-    height 60
-    pack_propagate false
-    pack :side => 'left'
+    text 'Start'
+    compound 'top'
+    image TkPhotoImage.new(:file => 'img/start_icon.gif')
+    pack :side => 'left', :padx => 1
 }
 
 # Pause Button
 pause_button = TkButton.new(buttons_row_frame) {
     text 'Pause'
-    height 60
-    pack_propagate false
-    pack :side => 'left'
-}
-
-# Stop Button
-stop_button = TkButton.new(buttons_row_frame) {
-    text 'Stop'
-    height 60
-    pack_propagate false
-    pack :side => 'left'
+    compound 'top'
+    image TkPhotoImage.new(:file => 'img/pause_icon.gif')
+    pack :side => 'left', :padx => 1
 }
 
 # Next Button
 next_button = TkButton.new(buttons_row_frame) {
     text 'Next'
-    height 60
-    pack_propagate false
-    pack :side => 'left'
+    compound 'top'
+    image TkPhotoImage.new(:file => 'img/next_icon.gif')
+    pack :side => 'left', :padx => 1
+}
+
+# Stop Button
+stop_button = TkButton.new(buttons_row_frame) {
+    text 'Stop'
+    compound 'top'
+    image TkPhotoImage.new(:file => 'img/stop_icon.gif')
+    pack :side => 'left', :padx => 1
 }
 
 # Random Button
 random_button = TkButton.new(buttons_row_frame) {
     text 'Random'
-    height 60
-    pack_propagate false
-    pack :side => 'left'
+    compound 'top'
+    image TkPhotoImage.new(:file => 'img/random_icon.gif')
+    pack :side => 'left', :padx => 1
 }
 
 # Delay Scale
 delay_range = TkScale.new(controls_labelframe) {
-    label 'Delay (ms):'
+    label 'Delay between generations (ms):'
     orient 'horizontal'
     from 100
     to 1000
     resolution 100
-    pack :fill => 'x'
+    pack :fill => 'x', :padx => 5
 }
 
-# Group Name Label
+# About Label
 TkLabel.new(about_labelframe) {
     text "Grupo:\n" +
-         "Friendship is Magic"
-    justify 'left'
-    pack :anchor => 'w', :padx => 16, :pady => 1
-}
-
-# Student Names Label
-TkLabel.new(about_labelframe) {
-    text "Componentes:\n" +
+         "Friendship is Magic\n" +
+         "\n" +
+         "Componentes:\n" +
          "Ana Paula Mello\n" +
          "Caio Fonseca Rodrigues\n" +
-         "Daniel Kelling Brum"
-    justify 'left'
-    pack :anchor => 'w', :padx => 16, :pady => 1
-}
-
-# Class Name Label
-TkLabel.new(about_labelframe) {
-    text "Disciplina:\n" +
+         "Daniel Kelling Brum\n" +
+         "\n" +
+         "Disciplina:\n" +
          "Modelos de Linguagens\n" +
-         "de Programação (2017/1)"
-    justify 'left'
-    pack :anchor => 'w', :padx => 16, :pady => 1
-}
-
-# Teacher Name Label
-TkLabel.new(about_labelframe) {
-    text "Professor:\n" +
+         "de Programação (2017/1)\n" +
+         "\n" +
+         "Professor:\n" +
          "Leandro Krug Wives"
     justify 'left'
-    pack :anchor => 'w', :padx => 16, :pady => 1
+    pack :pady => 1
 }
 
 # Inf Logo Label
 TkLabel.new(about_labelframe) {
     image TkPhotoImage.new(:file => 'img/inf_logo.gif')
-    pack
+    pack :pady => 1
 }
 
 # Status Label
