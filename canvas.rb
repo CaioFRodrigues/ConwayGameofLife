@@ -1,25 +1,34 @@
 require 'tk'
 
-def draw_canvas_prototype(canvas, canvas_size, n_cells)
-    canvas_width = canvas_size
-    canvas_height = canvas_size
-    canvas.configure(:width => canvas_width, :height => canvas_height)
+CANVAS_SIZE = 430
+N_CELLS = 39
+CELL_SIZE = 10
 
-    cell_size = (canvas_size - n_cells - 1) / n_cells
+# I don't know why this is the case...
+ORIGIN_X = 3
+ORIGIN_Y = 3
 
-    # clear everything
+def clear_canvas(canvas)
     canvas.delete('all')
+    TkcRectangle.new(canvas, ORIGIN_X, ORIGIN_Y, CANVAS_SIZE + ORIGIN_X, CANVAS_SIZE + ORIGIN_Y, :fill => 'gray', :width => 0)
+end
 
-    # vertical lines
-    for i in 0..n_cells
-        cur_x = i*(1 + cell_size) + 3 # origin is 3,3, for some reason
-        TkcLine.new(canvas, cur_x, 3, cur_x, canvas_height + 3, :fill => 'gray')
-    end
+def draw_canvas(canvas, cells)
+    for i in 0 ... cells.size
+        row = cells[i]
+        start_y = ORIGIN_Y + 1 + i * (CELL_SIZE + 1)
+        end_y = start_y + CELL_SIZE
 
-    # horizontal lines
-    for i in 0..n_cells
-        cur_y = i*(1 + cell_size) + 3 # origin is 3,3, for some reason
-        TkcLine.new(canvas, 3, cur_y, canvas_width + 3, cur_y, :fill => 'gray')
+        for j in 0 ... row.size
+            start_x = ORIGIN_X + 1 + j * (CELL_SIZE + 1)
+            end_x = start_x + CELL_SIZE
+            fill = (cells[i][j] == 1) ? 'black' : 'white'
+            TkcRectangle.new(canvas, start_x, start_y, end_x, end_y, :fill => fill, :width => 0)
+        end
     end
 end
 
+def redraw_canvas(canvas)
+    clear_canvas(canvas)
+    draw_canvas(canvas, cells)
+end
