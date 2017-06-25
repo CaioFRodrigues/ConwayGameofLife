@@ -2,6 +2,7 @@
 
 kindergarten = [[1, 1, 0, 0, 0, 0], [1, 0, 1, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]
 
+
 def getPossibleCoordinates(gem)
     # Gets the possible x and y values of the neighbours
 
@@ -31,17 +32,33 @@ def generateNeighbours(kindergarten, gem, coordinates_set)
 
 end
 
-def getLiveNeighbours(kindergarten, gem)
-    
-    isAlive = lambda { |neighbour, kindergarten| neighbour if kindergarten[neighbour[0]][neighbour[1]] == 1 }
+isAlive = lambda { |neighbour, kindergarten| neighbour if kindergarten[neighbour[0]][neighbour[1]] == 1 }
 
-    generateNeighbours(kindergarten, gem, getPossibleCoordinates(gem)).select {
-    
-        |neighbour| isAlive.call(neighbour, kindergarten)
-        
-    }.compact
+def getLiveNeighbours(kindergarten, neighbours, isAlive)
 
+    first, *rest = *neighbours
+
+    if neighbours.empty?
+        return []
+    elsif isAlive.call(first, kindergarten)
+        return [first].concat getLiveNeighboursR(kindergarten, rest, isAlive)
+    else
+        return getLiveNeighboursR(kindergarten, rest, isAlive)
+    end
+    
 end
+
+# def getLiveNeighbours(kindergarten, gem)
+    
+    # isAlive = lambda { |neighbour, kindergarten| neighbour if kindergarten[neighbour[0]][neighbour[1]] == 1 }
+
+    # generateNeighbours(kindergarten, gem, getPossibleCoordinates(gem)).select {
+    
+        # |neighbour| isAlive.call(neighbour, kindergarten)
+        
+    # }.compact
+
+# end
 
 
 def evolveKindergarten(kindergarten)
@@ -72,5 +89,6 @@ def evolveKindergarten(kindergarten)
 
 end
 
-print evolveKindergarten(kindergarten)
+# print evolveKindergarten(kindergarten)
 
+print getLiveNeighbours(kindergarten, generateNeighbours(kindergarten, [1,1], getPossibleCoordinates([1,1])), isAlive)
