@@ -7,13 +7,13 @@ class UI
     ORIGIN_X = 3
     ORIGIN_Y = 3
 
-    def clear_canvas(canvas)
-        canvas.delete('all')
-        TkcRectangle.new(canvas, ORIGIN_X, ORIGIN_Y, CANVAS_WIDTH + ORIGIN_X, CANVAS_HEIGHT + ORIGIN_Y, :fill => 'gray', :width => 0)
+    def clear_canvas()
+        @canvas.delete('all')
+        TkcRectangle.new(@canvas, ORIGIN_X, ORIGIN_Y, CANVAS_WIDTH + ORIGIN_X, CANVAS_HEIGHT + ORIGIN_Y, :fill => 'gray', :width => 0)
     end
 
-    def draw_canvas(canvas)
-        clear_canvas(canvas)
+    def draw_canvas()
+        clear_canvas()
 
         for i in 0 ... $state.board_state.size
             row = $state.board_state[i]
@@ -24,7 +24,7 @@ class UI
                 start_x = ORIGIN_X + 1 + j * (CELL_WIDTH + 1)
                 end_x = start_x + CELL_WIDTH
                 fill = ($state.board_state[i][j] == 1) ? 'black' : 'white'
-                TkcRectangle.new(canvas, start_x, start_y, end_x, end_y, :fill => fill, :width => 0)
+                TkcRectangle.new(@canvas, start_x, start_y, end_x, end_y, :fill => fill, :width => 0)
             end
         end
     end

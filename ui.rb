@@ -40,7 +40,7 @@ class UI
 
     def initialize()
         setup_elements()
-        draw_canvas(@canvas)
+        draw_canvas()
     end
 
     def run()
@@ -126,6 +126,7 @@ class UI
             compound 'top'
             image TkPhotoImage.new(:file => 'img/start_icon.gif')
             pack :side => 'left', :padx => 1
+            command proc { $state.start }
         }
 
         # Pause Button
@@ -134,6 +135,7 @@ class UI
             compound 'top'
             image TkPhotoImage.new(:file => 'img/pause_icon.gif')
             pack :side => 'left', :padx => 1
+            command proc { $state.pause }
         }
 
         # Next Button
@@ -142,6 +144,7 @@ class UI
             compound 'top'
             image TkPhotoImage.new(:file => 'img/next_icon.gif')
             pack :side => 'left', :padx => 1
+            command proc { $state.next }
         }
 
         # Stop Button
@@ -150,6 +153,7 @@ class UI
             compound 'top'
             image TkPhotoImage.new(:file => 'img/stop_icon.gif')
             pack :side => 'left', :padx => 1
+            command proc { $state.stop }
         }
 
         # Random Button
@@ -158,11 +162,13 @@ class UI
             compound 'top'
             image TkPhotoImage.new(:file => 'img/random_icon.gif')
             pack :side => 'left', :padx => 1
+            command proc { $state.random }
         }
 
         # Delay Scale
-        delay_range = TkScale.new(controls_labelframe) {
+        @delay_range = TkScale.new(controls_labelframe) {
             label 'Delay between generations (ms):'
+            variable $state.ms_delay
             orient 'horizontal'
             from 100
             to 1000
