@@ -1,4 +1,5 @@
 require 'tk'
+require_relative 'config'
 require_relative 'state'
 require_relative 'ui'
 require_relative 'canvas'

@@ -1,4 +1,5 @@
 require 'tk'
+require_relative 'config'
 require_relative 'canvas'
 require_relative 'state'
 
@@ -33,6 +34,9 @@ Main Window
 
 
 class UI
+
+    CANVAS_HEIGHT = (CELL_HEIGHT + 1) * N_CELLS_PER_ROW + 1
+    CANVAS_WIDTH = (CELL_WIDTH + 1) * N_CELLS_PER_COL + 1
 
     def initialize()
         setup_elements()
@@ -108,8 +112,8 @@ class UI
 
         # Canvas
         @canvas = TkCanvas.new(drawable_frame) {
-            width 430
-            height 430
+            width CANVAS_WIDTH
+            height CANVAS_HEIGHT
             relief 'solid'
             borderwidth 1
             background 'white'

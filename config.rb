@@ -1,0 +1,5 @@
+# Config game params
+N_CELLS_PER_ROW = 39
+N_CELLS_PER_COL = 39
+CELL_WIDTH = 10
+CELL_HEIGHT = 10
