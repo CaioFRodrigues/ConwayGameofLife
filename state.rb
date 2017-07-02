@@ -17,6 +17,12 @@ class State
         @living_cells_str = TkVariable.new("Living cells: 0")
     end
 
+    def toggle_cell(id)
+        i = id / N_CELLS_PER_ROW
+        j = id % N_CELLS_PER_ROW
+        @board_state[i][j] = (@board_state[i][j] + 1) % 2
+    end
+
     def set_living_cells(living_cells)
         @living_cells = living_cells
         @living_cells_str.value = "Living cells: #{living_cells}"
