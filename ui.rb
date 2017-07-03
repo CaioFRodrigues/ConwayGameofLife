@@ -38,6 +38,8 @@ class UI
     CANVAS_HEIGHT = (CELL_HEIGHT + 1) * N_CELLS_PER_ROW + 1
     CANVAS_WIDTH = (CELL_WIDTH + 1) * N_CELLS_PER_COL + 1
 
+    attr_reader :start_button, :pause_button, :next_button, :stop_button, :random_button
+
     def initialize()
         setup_elements()
         create_canvas()
@@ -121,7 +123,7 @@ class UI
         }
 
         # Start Button
-        play_button = TkButton.new(buttons_row_frame) {
+        @start_button = TkButton.new(buttons_row_frame) {
             text 'Start'
             compound 'top'
             image TkPhotoImage.new(:file => 'img/start_icon.gif')
@@ -130,8 +132,9 @@ class UI
         }
 
         # Pause Button
-        pause_button = TkButton.new(buttons_row_frame) {
+        @pause_button = TkButton.new(buttons_row_frame) {
             text 'Pause'
+            state 'disabled'
             compound 'top'
             image TkPhotoImage.new(:file => 'img/pause_icon.gif')
             pack :side => 'left', :padx => 1
@@ -139,7 +142,7 @@ class UI
         }
 
         # Next Button
-        next_button = TkButton.new(buttons_row_frame) {
+        @next_button = TkButton.new(buttons_row_frame) {
             text 'Next'
             compound 'top'
             image TkPhotoImage.new(:file => 'img/next_icon.gif')
@@ -148,8 +151,9 @@ class UI
         }
 
         # Stop Button
-        stop_button = TkButton.new(buttons_row_frame) {
+        @stop_button = TkButton.new(buttons_row_frame) {
             text 'Stop'
+            state 'disabled'
             compound 'top'
             image TkPhotoImage.new(:file => 'img/stop_icon.gif')
             pack :side => 'left', :padx => 1
@@ -157,7 +161,7 @@ class UI
         }
 
         # Random Button
-        random_button = TkButton.new(buttons_row_frame) {
+        @random_button = TkButton.new(buttons_row_frame) {
             text 'Random'
             compound 'top'
             image TkPhotoImage.new(:file => 'img/random_icon.gif')

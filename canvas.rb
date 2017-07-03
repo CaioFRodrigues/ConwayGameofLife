@@ -24,7 +24,7 @@ class UI
                 end_x = start_x + CELL_WIDTH
                 fill = ($state.board_state[i][j] == 1) ? 'black' : 'white'
                 id = i * N_CELLS_PER_ROW + j
-                cell = TkcRectangle.new(@canvas, start_x, start_y, end_x, end_y, :fill => fill, :width => 0, :tags => "#{id}")
+                cell = TkcRectangle.new(@canvas, start_x, start_y, end_x, end_y, :fill => fill, :width => 0, :tags => "id_#{id}")
                 cell.bind("1", proc{ cell_clicked })
             end
         end
@@ -32,13 +32,12 @@ class UI
 
     def update_canvas()
         for id in 0 ... N_CELLS_PER_COL * N_CELLS_PER_ROW
-            cell = @canvas.find_withtag(id)[0]
-            update_cell(cell)
+            cell = @canvas.find_withtag("id_#{id}")[0]
+            update_cell(cell, id)
         end
     end
 
-    def update_cell(cell)
-        id = cell.gettags()[0]
+    def update_cell(cell, id)
         cell_state = $state.get_cell(id)
         fill = (cell_state == 1) ? 'black' : 'white'
         cell.configure(:fill => fill)
@@ -46,9 +45,9 @@ class UI
 
     def cell_clicked()
         cell = @canvas.find_withtag("current")[0]
-        id = cell.gettags()[0]
+        id = cell.gettags()[0][3..-1].to_i
         $state.toggle_cell(id)
-        update_cell(cell)
+        update_cell(cell, id)
     end
 
 end

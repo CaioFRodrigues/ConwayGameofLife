@@ -55,25 +55,34 @@ class State
 
         @worker_thread.run
 
-        # disable canvas interaction
+        # TODO: disable canvas interaction
+
+        $ui.start_button[:state] = 'disabled'
+        $ui.pause_button[:state] = 'normal'
+        $ui.next_button[:state] = 'disabled'
+        $ui.stop_button[:state] = 'normal'
+        $ui.random_button[:state] = 'disabled'
     end
 
     def pause()
-        # shouldn't be able to pause if not playing
-
         @run_state = STATE_PAUSED
         @status_str.value = "Status: Paused"
 
-        # disable random button
+        $ui.start_button[:state] = 'normal'
+        $ui.pause_button[:state] = 'disabled'
     end
 
     def stop()
         @run_state = STATE_STOPPED
         @status_str.value = "Status: Stopped"
 
-        # enable random button
-        # enable next button
-        # enable canvas interaction
+        $ui.start_button[:state] = 'normal'
+        $ui.pause_button[:state] = 'disabled'
+        $ui.next_button[:state] = 'normal'
+        $ui.stop_button[:state] = 'disabled'
+        $ui.random_button[:state] = 'normal'
+
+        # TODO: enable canvas interaction
 
         @board_state = Array.new(N_CELLS_PER_COL){ Array.new(N_CELLS_PER_ROW) { 0 } } # zeroed-out board
         set_living_cells(0)
@@ -83,7 +92,9 @@ class State
     end
 
     def next()
-        # disable canvas interaction
+
+        # TODO: disable canvas interaction
+
         evolve()
     end
 
