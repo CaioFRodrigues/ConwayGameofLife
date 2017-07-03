@@ -40,7 +40,7 @@ class UI
 
     def initialize()
         setup_elements()
-        draw_canvas()
+        create_canvas()
     end
 
     def run()

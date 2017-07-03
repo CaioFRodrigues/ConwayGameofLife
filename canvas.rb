@@ -12,7 +12,7 @@ class UI
         TkcRectangle.new(@canvas, ORIGIN_X, ORIGIN_Y, CANVAS_WIDTH + ORIGIN_X, CANVAS_HEIGHT + ORIGIN_Y, :fill => 'gray', :width => 0)
     end
 
-    def draw_canvas()
+    def create_canvas()
         clear_canvas()
 
         for i in 0 ... N_CELLS_PER_COL
@@ -30,11 +30,25 @@ class UI
         end
     end
 
+    def update_canvas()
+        for id in 0 ... N_CELLS_PER_COL * N_CELLS_PER_ROW
+            cell = @canvas.find_withtag(id)[0]
+            update_cell(cell)
+        end
+    end
+
+    def update_cell(cell)
+        id = cell.gettags()[0]
+        cell_state = $state.get_cell(id)
+        fill = (cell_state == 1) ? 'black' : 'white'
+        cell.configure(:fill => fill)
+    end
+
     def cell_clicked()
         cell = @canvas.find_withtag("current")[0]
         id = cell.gettags()[0]
         $state.toggle_cell(id)
-        draw_canvas()
+        update_cell(cell)
     end
 
 end

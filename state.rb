@@ -15,6 +15,22 @@ class State
         @status_str = TkVariable.new("Status: Stopped")
         @generation_str = TkVariable.new("Generation: 0")
         @living_cells_str = TkVariable.new("Living cells: 0")
+        @worker_thread = Thread.new {
+            loop {
+                if @run_state != STATE_RUNNING
+                    Thread.stop
+                else
+                    evolve()
+                    sleep(ms_delay / 1000)
+                end
+            }
+        }
+    end
+
+    def get_cell(id)
+        i = id / N_CELLS_PER_ROW
+        j = id % N_CELLS_PER_ROW
+        return @board_state[i][j]
     end
 
     def toggle_cell(id)
@@ -37,15 +53,17 @@ class State
         @run_state = STATE_RUNNING
         @status_str.value = "Status: Running"
 
-        # create/wake background worker?
+        @worker_thread.run
+
         # disable canvas interaction
     end
 
     def pause()
+        # shouldn't be able to pause if not playing
+
         @run_state = STATE_PAUSED
         @status_str.value = "Status: Paused"
 
-        # sleep background worker?
         # disable random button
     end
 
@@ -53,7 +71,6 @@ class State
         @run_state = STATE_STOPPED
         @status_str.value = "Status: Stopped"
 
-        # kill background worker?
         # enable random button
         # enable next button
         # enable canvas interaction
@@ -62,18 +79,20 @@ class State
         set_living_cells(0)
         set_generation(0)
 
-        $ui.draw_canvas()
+        $ui.update_canvas()
     end
 
     def next()
+        # disable canvas interaction
+        evolve()
+    end
+
+    def evolve()
         # TODO: replace with an actual function and all...
-        @board_state[5][5] = 1 # TODO: change me to an evolve function
+        toggle_cell(0) # TODO: change me to an evolve function
         set_living_cells(@living_cells + 1) # TODO: count them
         set_generation(@generation + 1)
-
-        # disable canvas interaction
-
-        $ui.draw_canvas()
+        $ui.update_canvas()
     end
 
     def random()
@@ -82,7 +101,7 @@ class State
         set_living_cells(42) # TODO: count them
         set_generation(0)
 
-        $ui.draw_canvas()
+        $ui.update_canvas()
     end
 
 end
