@@ -5,11 +5,12 @@ class State
     STATE = [STATE_RUNNING = 0, STATE_PAUSED = 1, STATE_STOPPED = 2]
 
     attr_accessor :ms_delay
-    attr_reader :board_state, :run_state, :generation, :living_cells,
-                :status_str, :generation_str, :living_cells_str
+    attr_reader :prev_board_state, :board_state, :run_state, :generation,
+                :living_cells, :status_str, :generation_str, :living_cells_str
 
     def initialize()
         @board_state = Array.new(N_CELLS_PER_COL){ Array.new(N_CELLS_PER_ROW) { 0 } } # zeroed-out board
+        @prev_board_state = @board_state.map(&:dup) # deep-enough copy
         @ms_delay = TkVariable.new
         @run_state = STATE_STOPPED
         @living_cells = 0
@@ -57,8 +58,6 @@ class State
 
         @worker_thread.run
 
-        # TODO: disable canvas interaction
-
         $ui.start_button[:state] = 'disabled'
         $ui.pause_button[:state] = 'normal'
         $ui.next_button[:state] = 'disabled'
@@ -84,8 +83,7 @@ class State
         $ui.stop_button[:state] = 'disabled'
         $ui.random_button[:state] = 'normal'
 
-        # TODO: enable canvas interaction
-
+        @prev_board_state = @board_state.map(&:dup) # deep-enough copy
         @board_state = Array.new(N_CELLS_PER_COL){ Array.new(N_CELLS_PER_ROW) { 0 } } # zeroed-out board
         set_living_cells(0)
         set_generation(0)
@@ -94,24 +92,28 @@ class State
     end
 
     def next()
-
-        # TODO: disable canvas interaction
+        $ui.stop_button[:state] = 'normal'
 
         evolve()
     end
 
     def evolve()
-        # TODO: replace with an actual function and all...
+        @prev_board_state = @board_state.map(&:dup) # deep-enough copy
         @board_state = evolveKindergarten(@board_state)
-        set_living_cells(@living_cells + 1) # TODO: count them
+
+        living_cells = @board_state.map{|row| row.reduce(:+)}.reduce(:+)
+        set_living_cells(living_cells)
         set_generation(@generation + 1)
+
         $ui.update_canvas()
     end
 
     def random()
+        @prev_board_state = @board_state.map(&:dup) # deep-enough copy
         @board_state = Array.new(N_CELLS_PER_COL){ Array.new(N_CELLS_PER_ROW) { rand(2) } } # random board
 
-        set_living_cells(42) # TODO: count them
+        living_cells = @board_state.map{|row| row.reduce(:+)}.reduce(:+)
+        set_living_cells(living_cells)
         set_generation(0)
 
         $ui.update_canvas()

@@ -31,9 +31,16 @@ class UI
     end
 
     def update_canvas()
-        for id in 0 ... N_CELLS_PER_COL * N_CELLS_PER_ROW
-            cell = @canvas.find_withtag("id_#{id}")[0]
-            update_cell(cell, id)
+        for i in 0 ... N_CELLS_PER_COL
+            for j in 0 ... N_CELLS_PER_ROW
+                if $state.board_state[i][j] == $state.prev_board_state[i][j]
+                    next
+                end
+
+                id = i * N_CELLS_PER_ROW + j
+                cell = @canvas.find_withtag("id_#{id}")[0]
+                update_cell(cell, id)
+            end
         end
     end
 
@@ -44,9 +51,21 @@ class UI
     end
 
     def cell_clicked()
+        if $state.run_state != State::STATE_STOPPED
+            return
+        end
+
         cell = @canvas.find_withtag("current")[0]
         id = cell.gettags()[0][3..-1].to_i
         $state.toggle_cell(id)
+
+        cell_state = $state.get_cell(id)
+        if cell_state == 1
+            $state.set_living_cells($state.living_cells + 1)
+        else
+            $state.set_living_cells($state.living_cells - 1)
+        end
+
         update_cell(cell, id)
     end
 
