@@ -1,4 +1,5 @@
 require_relative 'game_functional'
+require_relative 'Board'
 
 class State
 
@@ -99,7 +100,14 @@ class State
 
     def evolve()
         @prev_board_state = @board_state.map(&:dup) # deep-enough copy
-        @board_state = evolveKindergarten(@board_state)
+
+        #functional
+        #@board_state = evolveKindergarten(@board_state)
+
+        #OOP
+        oop_board = Kindergarten.new(N_CELLS_PER_ROW, N_CELLS_PER_COL, @board_state)
+        oop_board.evolve()
+        @board_state = oop_board.get_board_state()
 
         living_cells = @board_state.map{|row| row.reduce(:+)}.reduce(:+)
         set_living_cells(living_cells)
