@@ -1,3 +1,5 @@
+require_relative 'game_functional'
+
 class State
 
     STATE = [STATE_RUNNING = 0, STATE_PAUSED = 1, STATE_STOPPED = 2]
@@ -100,7 +102,7 @@ class State
 
     def evolve()
         # TODO: replace with an actual function and all...
-        toggle_cell(0) # TODO: change me to an evolve function
+        @board_state = evolveKindergarten(@board_state)
         set_living_cells(@living_cells + 1) # TODO: count them
         set_generation(@generation + 1)
         $ui.update_canvas()

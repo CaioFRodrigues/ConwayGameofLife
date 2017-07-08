@@ -62,40 +62,47 @@ def getLiveNeighbours(kindergarten, neighbours, isAlive)
 end
 
 
-def evolveKindergarten(kindergarten, game_rules)
+def evolveKindergarten(kindergarten)
+    game_rules = getGameRules()
+    applyGameRules(kindergarten, game_rules)
+end
 
-        (0..kindergarten.length-1).map{
-            |x| (0..kindergarten.length-1).map{
-                |y|
-                
-                gem_coordinates = [x,y]
-                neighbours = generateNeighbours(kindergarten, gem_coordinates, getPossibleCoordinates(gem_coordinates))
-                                
-                if game_rules[:isAlive].call(gem_coordinates, kindergarten)
-                    if game_rules[:mustDie].call(getLiveNeighbours(kindergarten, neighbours, game_rules[:isAlive]))
-                        DEAD_CELL
-                    else
-                        LIVE_CELL
-                    end
-                    
+
+def applyGameRules(kindergarten, game_rules)
+
+    (0..kindergarten.length-1).map{
+        |x| (0..kindergarten.length-1).map{
+            |y|
+            
+            gem_coordinates = [x,y]
+            neighbours = generateNeighbours(kindergarten, gem_coordinates, getPossibleCoordinates(gem_coordinates))
+                            
+            if game_rules[:isAlive].call(gem_coordinates, kindergarten)
+                if game_rules[:mustDie].call(getLiveNeighbours(kindergarten, neighbours, game_rules[:isAlive]))
+                    DEAD_CELL
                 else
-                    if game_rules[:canLive].call(getLiveNeighbours(kindergarten, neighbours, game_rules[:isAlive]))
-                        LIVE_CELL
-                    else
-                        DEAD_CELL
-                    end
+                    LIVE_CELL
                 end
-            }
+                
+            else
+                if game_rules[:canLive].call(getLiveNeighbours(kindergarten, neighbours, game_rules[:isAlive]))
+                    LIVE_CELL
+                else
+                    DEAD_CELL
+                end
+            end
         }
+    }
 
 end
 
-game_rules = {
 
-    isAlive: lambda {|gem_coordinates, kindergarten| gem_coordinates if kindergarten[gem_coordinates[0]][gem_coordinates[1]] == LIVE_CELL },
-    canLive: lambda {|live_neighbours| live_neighbours.length == 3},
-    mustDie: lambda {|live_neighbours| live_neighbours.length > 3 or live_neighbours.length < 2}
+def getGameRules()
+    return {
 
-}
+        isAlive: lambda {|gem_coordinates, kindergarten| gem_coordinates if kindergarten[gem_coordinates[0]][gem_coordinates[1]] == LIVE_CELL },
+        canLive: lambda {|live_neighbours| live_neighbours.length == 3},
+        mustDie: lambda {|live_neighbours| live_neighbours.length > 3 or live_neighbours.length < 2}
 
-print evolveKindergarten(kindergarten, game_rules)
+    }
+end
