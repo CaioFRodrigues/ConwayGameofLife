@@ -3,18 +3,33 @@ require_relative 'Tile'
 class Kindergarten		
 
 	#initialize: initializes a board given a list with all the tiles
-	def initialize(max_row, max_col)
-		@tile = Array.new(max_row){Array.new(max_col)}
-
-		for row in 0...max_row
-			for col in 0...max_col
-				if [true, false].sample
-					@tile[row][col] = Tile.new row, col, true
-				else 
-					@tile[row][col] = Tile.new row, col
-				end
-			end
-		end
+	def initialize(max_row, max_col, board=false)
+        if board == false            
+        #Initializes random board
+        @tile = Array.new(max_row){Array.new(max_col)}
+            for row in 0...max_row
+                for col in 0...max_col
+                    if [true, false].sample
+                        @tile[row][col] = Tile.new row, col, true
+                    else 
+                        @tile[row][col] = Tile.new row, col
+                    end
+                end
+            end      
+        #Initializes from pre-made board
+        else
+            @tile = Array.new(board.length){Array.new(board[0].length)}
+            board.each_with_index do |line, row|
+                line.each_with_index do |current_gem, col|
+                	if board[row][col] == 1
+                    	@tile[row][col] = Tile.new  row, col, true
+                    elsif board[row][col] == 0
+                    	@tile[row][col] = Tile.new  row, col, false 
+                   	end
+                end
+            end
+        end
+        
 	end 
 
 
@@ -106,9 +121,9 @@ end
 
 #Example of the use	
 if __FILE__ == $0
-
-	board = Kindergarten.new(3,2)
-	puts board.get_board_state
+    tiles = [[1,1,0,1], [0,1,0,1]]
+	board = Kindergarten.new(4,4, tiles)
+	print board.get_board_state
 	board.evolve
 
 	puts "NOW"
