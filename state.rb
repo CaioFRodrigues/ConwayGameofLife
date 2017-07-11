@@ -5,13 +5,16 @@ class State
 
     STATE = [STATE_RUNNING = 0, STATE_PAUSED = 1, STATE_STOPPED = 2]
 
-    attr_accessor :ms_delay
+    EVOLVER = [FUNCTIONAL = 0, OOP = 1]
+
+    attr_accessor :ms_delay, :evolve_method
     attr_reader :prev_board_state, :board_state, :run_state, :generation,
                 :living_cells, :status_str, :generation_str, :living_cells_str
 
     def initialize()
         @board_state = Array.new(N_CELLS_PER_COL){ Array.new(N_CELLS_PER_ROW) { 0 } } # zeroed-out board
         @prev_board_state = @board_state.map(&:dup) # deep-enough copy
+        @evolve_method = FUNCTIONAL
         @ms_delay = TkVariable.new
         @run_state = STATE_STOPPED
         @living_cells = 0
@@ -101,13 +104,15 @@ class State
     def evolve()
         @prev_board_state = @board_state.map(&:dup) # deep-enough copy
 
-        #functional
-        #@board_state = evolveKindergarten(@board_state)
-
-        #OOP
-        oop_board = Kindergarten.new(N_CELLS_PER_ROW, N_CELLS_PER_COL, @board_state)
-        oop_board.evolve()
-        @board_state = oop_board.get_board_state()
+        if @evolve_method == FUNCTIONAL
+            puts "F"
+            @board_state = evolveKindergarten(@board_state)
+        else
+            puts "O"
+            oop_board = Kindergarten.new(N_CELLS_PER_ROW, N_CELLS_PER_COL, @board_state)
+            oop_board.evolve()
+            @board_state = oop_board.get_board_state()
+        end
 
         living_cells = @board_state.map{|row| row.reduce(:+)}.reduce(:+)
         set_living_cells(living_cells)
