@@ -22,7 +22,8 @@ class State
         @status_str = TkVariable.new("Status: Stopped")
         @generation_str = TkVariable.new("Generation: 0")
         @living_cells_str = TkVariable.new("Living cells: 0")
-        @worker_thread = Thread.new { Thread.stop }
+        @worker_thread = Thread.new { Thread.exit }
+        @worker_thread.run
     end
 
     def get_cell(id)
