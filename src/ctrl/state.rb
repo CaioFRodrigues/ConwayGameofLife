@@ -1,5 +1,5 @@
-require_relative 'game_functional'
-require_relative 'Board'
+require_relative '../func/game_functional'
+require_relative '../oop/Board'
 
 class State
 
@@ -105,10 +105,8 @@ class State
         @prev_board_state = @board_state.map(&:dup) # deep-enough copy
 
         if @evolve_method == FUNCTIONAL
-            puts "F"
             @board_state = evolveKindergarten(@board_state)
         else
-            puts "O"
             oop_board = Kindergarten.new(N_CELLS_PER_ROW, N_CELLS_PER_COL, @board_state)
             oop_board.evolve()
             @board_state = oop_board.get_board_state()

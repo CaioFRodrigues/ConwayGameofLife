@@ -1,8 +1,8 @@
 require 'tk'
 require_relative 'config'
-require_relative 'state'
-require_relative 'ui'
-require_relative 'canvas'
+require_relative 'ctrl/state'
+require_relative 'ui/ui'
+require_relative 'ui/canvas'
 
 # Init singletons
 $state = State.new

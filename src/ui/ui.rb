@@ -1,7 +1,7 @@
 require 'tk'
-require_relative 'config'
+require_relative '../config'
 require_relative 'canvas'
-require_relative 'state'
+require_relative '../ctrl/state'
 
 =begin
 

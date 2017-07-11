@@ -1,5 +1,5 @@
 require 'tk'
-require_relative 'config'
+require_relative '../config'
 
 class UI
 
