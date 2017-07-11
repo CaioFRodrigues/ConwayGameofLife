@@ -22,16 +22,7 @@ class State
         @status_str = TkVariable.new("Status: Stopped")
         @generation_str = TkVariable.new("Generation: 0")
         @living_cells_str = TkVariable.new("Living cells: 0")
-        @worker_thread = Thread.new {
-            loop {
-                if @run_state != STATE_RUNNING
-                    Thread.stop
-                else
-                    evolve()
-                    sleep(ms_delay / 1000)
-                end
-            }
-        }
+        @worker_thread = Thread.new { Thread.stop }
     end
 
     def get_cell(id)
@@ -60,6 +51,16 @@ class State
         @run_state = STATE_RUNNING
         @status_str.value = "Status: Running"
 
+        @worker_thread = Thread.new {
+            loop {
+                if @run_state != STATE_RUNNING
+                    Thread.exit
+                else
+                    evolve()
+                    sleep(ms_delay / 1000.0)
+                end
+            }
+        }
         @worker_thread.run
 
         $ui.start_button[:state] = 'disabled'
@@ -79,6 +80,11 @@ class State
 
     def stop()
         @run_state = STATE_STOPPED
+
+        while @worker_thread.alive? do
+            ; # do nothing
+        end
+
         @status_str.value = "Status: Stopped"
 
         $ui.start_button[:state] = 'normal'
